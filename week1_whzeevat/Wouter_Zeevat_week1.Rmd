@@ -19,7 +19,8 @@ Beantwoord de volgende vragen
 3. 
 
 
-
+[img](img.png)
+Hier is het verband tussen alle waardes te zien!
 
 4. De formule returnt dR/dt in plaats van R. Dit doet die omdat de dr/dt de transcriptie min de degradatie is. In plaats van de transcriptie zonder de degradatie.
 
