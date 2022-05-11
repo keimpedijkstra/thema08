@@ -1,19 +1,26 @@
 ---
-title: "week_2"
+title: "Week2.Rmd"
 output: html_document
 date: '2022-05-10'
 ---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
 
 ```{r}
 library(deSolve)
 ```
 
 ```{r}
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = )
 
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20)
 
 formula_1 <- function(t,y,parms){
   with(as.list(c(y,parms)),{
+    
+          
+         D <- D * 1000 * (1 / 374.471)
          dmRNAr <- ks_Rm * (1 - DRN/(IC50_Rm+DRN)) - kd_Rm * mRNAr
          dR <- ks_r * mRNAr + Rf *kre *DRN - kon * D * R - kd_R * R
          dDR <- kon * D * R - kT *DR
@@ -22,12 +29,9 @@ formula_1 <- function(t,y,parms){
        }
        )
 }
-
 state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
-times <- seq(0, 24,  by = 1)
-
+times <- seq(0, 48,  by = 1)
 out  <- ode(times = times, y = state, parms = parameters, func = formula_1, method = "euler")
-
 
 plot(out)
 ```
