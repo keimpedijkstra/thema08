@@ -1,0 +1,53 @@
+---
+title: "Wouter_Zeevat_week1"
+output: html_document
+date: '2022-05-07'
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Beantwoord de volgende vragen
+[1] Welke parameters moet je programmeren?
+[2] Zoek bronnen op internet die uitleggen waar de formule dR/dt = -rR + m vandaan komt.
+[3] Teken het biologisch model en leg de vertaling naar de formule uit.
+[4] Wat is de return waarde van de model functie in R? Waarom return je die en niet R zelf?
+
+1. De parameters in deze formule zijn de decay of existing transcripts, en de new produced transcript per seconds.
+2. check
+3. 
+
+
+[img](img.png)
+Hier is het verband tussen alle waardes te zien!
+
+4. De formule returnt dR/dt in plaats van R. Dit doet die omdat de dr/dt de transcriptie min de degradatie is. In plaats van de transcriptie zonder de degradatie.
+
+```{r}
+library(deSolve)
+```
+```{r}
+parameters.decrease <- c(r = 0.1, m = 5)
+parameters.steady <- c(r = 0.1, m = 10)
+parameters.increase <- c(r = 0.1, m = 15)
+
+mRNA <- function(t,y,parms){
+  with(as.list(c(parms)),{
+    
+         formula <- m - r * y
+         
+         return(list(c(formula)))
+       }
+       )
+}
+
+state <- c(mRNA = 100)
+times <- seq(0, 50,  by = 1)
+
+out.decrease  <- ode(times = times, y = state,   parms = parameters.decrease, func = mRNA, method = "euler")
+out.steady  <- ode(times = times, y = state,   parms = parameters.steady, func = mRNA, method = "euler")
+out.increase  <- ode(times = times, y = state,   parms = parameters.increase, func = mRNA, method = "euler")
+
+plot(out.steady, out.decrease, out.increase)
+```
