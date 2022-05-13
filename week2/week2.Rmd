@@ -52,20 +52,6 @@ Glucocorticoïden zorgen ervoor dat het instabiele RNA van onstekings genen word
 library(deSolve)
 ```
 
----
-title: "Week2.Rmd"
-output: html_document
-date: '2022-05-10'
----
-
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
-```
-
-```{r}
-library(deSolve)
-```
-
 - 
 ![image](model.png)
 - 
