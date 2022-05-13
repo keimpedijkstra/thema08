@@ -8,6 +8,46 @@ date: '2022-05-10'
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
+## Introductie corticosteroïden
+Corticosteroïden , ook wel bijnierschorshormonen genoemd, zijn steroïden die in de schors van de bijnieren word geproduceerd. 
+Corticosteroïden vallen onder de steroïdhormonen, dit zijn hormonen die geproduceerd worden door een cholesterol molecuul te nemen en deze te veranderen.
+De steroïden zijn hydrofoob en zijn receptoren bevinden zich in het cytoplasma, samen vormen zij een complex dat in de celkern DNA kan binden en transcriptie op gang zet.
+Veel van de verwante steroïden hebben echter geen hormonale functie, maar vervullen andere functies binnen de cel.
+De corticosteroïden zijn onder te verdelen in twee groepen:
+
+### Glucocorticoïden
+Deze groep corticosteroïden heeft effect op het metabolisme van glucose, het bevorderd de synthese van glucose.
+Bij stress wordt het hormoon meer aangemaakt, daarom is overgewicht een symptoom van stress.
+Verder heeft het de steroïde nog een rol in de volgende processen:
+* Vetverdeling
+* Onderdrukking van de afweer
+* Onderdrukking ontsteking
+* Bevordering afbraak eiwitten
+
+### Mineralocorticoïden
+Deze tweede groep corticosteroïden beïnvloed de water-zout balans en met als primair doel het verhogen van de bloeddruk.
+Daarnaast hebben ze ook een effect op de PH waarde door ionen op te nemen in de nieren.
+
+### Methylprednisolon 
+Methylprednisolon(MPL) is het medicijn dat bestudeerd wordt in deze opdracht.
+Het is een deriviaat van cortisol, de belangrijkste glucocorticoïde.
+Het medicijn word gebruikt om ernstige ontstekingen te remmen bij o.a:
+MS; lupus; reuma; en andere soorten ontstekingsziekten.
+
+### Werking
+Glucocorticoïden activeren anti-onstekings genen, remmen pro-onstekings genen en hebben nog een paar posttranscriptionele regulerende functies.
+
+#### Gen activatie
+Glucocorticoid receptors binden aan  glucocorticoid response elements (GRE) in de promotor regio van glucocorticoid-responsive genen, deze interactie activeert de transcriptie van deze genen. De activatie van de transcriptie gaat hier natuurlijk ook gepaard met een aantal co-factoren en het SWI/SNF complex.
+
+#### Gen de-activatie
+Glucocorticoïden schakelen onder meer genen uit die coderen voor cytokines, chemokines en onstekings enzym receptors. 
+
+#### Post-transciptional effecten
+Glucocorticoïden zorgen ervoor dat het instabiele RNA van onstekings genen word afgebroken door RNAses, in tegenstelling tot onstekings bemiddelaars die dit effct juist tegen proberen te gaan.
+
+
+
 ```{r}
 library(deSolve)
 ```
