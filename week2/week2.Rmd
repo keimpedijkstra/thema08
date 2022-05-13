@@ -46,8 +46,10 @@ Glucocorticoïden schakelen onder meer genen uit die coderen voor cytokines, che
 #### Post-transciptional effecten
 Glucocorticoïden zorgen ervoor dat het instabiele RNA van onstekings genen word afgebroken door RNAses, in tegenstelling tot onstekings bemiddelaars die dit effct juist tegen proberen te gaan.
 
+## Explanation formula
+- Wanneer het geneesmiddel (D) bij de receptor komt,  wordt er meer van het receptorcomplex aangemaakt. Wanneer dit gebeurt wordt er gekeken naar de hoeveelheid van het complex. Hoe meer er is, des te minder de receptor mRNA aangemaakt wordt.
 
-
+![image](model.png)
 ```{r}
 library(deSolve)
 ```
@@ -65,10 +67,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r}
 library(deSolve)
 ```
-
-- 
-![image](model.png)
-- 
 
 ```{r}
 
@@ -93,3 +91,11 @@ out  <- ode(times = times, y = state, parms = parameters, func = formula_1, meth
 
 plot(out)
 ```
+## Beschrijf de resultaten
+- a. De eerste grafiek met de concentratie mRNA receptor daalt eerst. Dit komt doordat er redelijk veel mRNA is, en die geremd wordt doordat er veel van het complex aangemaakt wordt. vervolgens stijgt het weer omdat de aanmaak van de receptor gedereguleerd wordt.
+  b. In de tweede grafiek zit alleen een daling. De beginwaarde van R is in het begin al hoog waardoor er geen extra meer aangemaakt moet worden. Wanneer de mRNA receptor verlaagt, gaat de R ook langzaam omlaag.
+  c. De derde grafiek laat de dichtheid MPL-receptor complex zien. Dit is eerst niet veel, maar doordat de mRNA moet dalen, wordt de dichtheid hoger. Waardoor de aanmaak van de mRNA receptor geremd wordt. Wanneer er weinig receptor is, wordt de dichtheid van de MPL-receptor complex ook omlaag. de mRNA hoeft namelijk niet meer geremd te worden.
+  
+  d. De laatste grafiek laat de hoeveelheid MPL-receptor complex in de celkern zien. Deze is in prencipe hetzelfde als de DR grafiek, maar dan ietsje vertraagd. Dit komt doordat de DRN een gevolg van de DR is.
+  
+  de hoeveelheid MPL-receptor complex in de celkern is de belangrijkste variabele. Deze zorgt namelijk direct voor de regulatie van de mRNA wat te maken heeft met de receptor.
