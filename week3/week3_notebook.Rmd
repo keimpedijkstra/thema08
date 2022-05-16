@@ -1,0 +1,55 @@
+---
+title: "week3"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## [1]
+
+
+
+## [2]
+```{r}
+#read data
+data <- read.csv("MPL.csv", na.strings = "NA")
+median_MPL_01 <- median(data$MPL_conc[data$dose==0.1], na.rm=T)
+median_MPL_01 
+
+medians <- aggregate(data[,c("MPL_conc","mRNA","Free_receptor")],list(data$dose,data$time), median, na.rm=T)
+names(medians)[1:2] <- c("dose","time")
+head(medians)
+
+#prepare data for plotting
+m.d.3 <- subset(medians, dose == 0.3)
+m.d.1 <- subset(medians, dose == 0.1)
+d.3 <- subset(data, dose == 0.3)
+d.1 <- subset(data, dose == 0.1)
+out.1 <- as.data.frame(out.1)
+out.3 <- as.data.frame(out.3)
+
+#plots for 0.3 dose
+plot( m.d.3$time, m.d.3$mRNA,type = "l", col = "red")
+lines(out.3$time, out.3$mRNAr)
+points(d.3$time, d.3$mRNA, pch="*")
+
+plot(m.d.3$time, m.d.3$Free_receptor, type = "l", col = "red")
+lines(out.3$time, out.3$R)
+points(d.3$time, d.3$Free_receptor, pch="*")
+
+#plots for 0.1 dose
+plot( m.d.1$time, m.d.1$mRNA,type = "l", col = "red")
+lines(out.1$time, out.1$mRNAr)
+points(d.1$time, d.1$mRNA, pch="*")
+
+plot(m.d.1$time, m.d.1$Free_receptor, type = "l", col = "red")
+lines(out.1$time, out.1$R)
+points(d.1$time, d.1$Free_receptor, pch="*")
+```
+
+
+
+
+## [3]
+
