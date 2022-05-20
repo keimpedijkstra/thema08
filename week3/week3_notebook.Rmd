@@ -140,21 +140,22 @@ abline(v=step, col="red", lty=2)
 times <- seq(0, 168,  by = 1)
 y = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
 
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.regular <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329/5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329/5, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.first <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329/2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329/2, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.second <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329*5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329*5, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.third <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329*2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329*2, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.fourth <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 plot(out.regular, out.first, out.second, out.third, out.fourth)
+
 ```
 
 
