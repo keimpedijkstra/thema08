@@ -7,7 +7,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ! Run the week2 assignment first !
-
+```{r}
+library(deSolve)
+```
 ### Assignment 1: assess model validity
 
 ## [1]
@@ -24,7 +26,6 @@ median_MPL_01
 
 medians <- aggregate(data[,c("MPL_conc","mRNA","Free_receptor")],list(data$dose,data$time), median, na.rm=T)
 names(medians)[1:2] <- c("dose","time")
-head(medians)
 
 #prepare data for plotting
 m.d.3 <- subset(medians, dose == 0.3)
@@ -68,9 +69,9 @@ If the drug has no influence on the synthesis of mRNA you would expect
 formula_2 <- function(t,y,parms){
   with(as.list(c(y,parms)),{
          D <- D * 1000 * (1 / 374.471)
-         dmRNAr <- ks_Rm * (1 - IC50_Rm) - kd_Rm * mRNAr
-         dR <- ks_r * mRNAr + Rf *kre *DRN - kon * D * R - kd_R * R
-         dDR <- kon * D * R - kT *DR
+         dmRNAr <- ks_Rm * (1 - DRN/(IC50_Rm+DRN)) - kd_Rm * mRNAr
+         dR <- ks_r * mRNAr + Rf *kre *DRN - kon  * R - kd_R * R
+         dDR <- kon  * R - kT *DR
          dDRN <- kT * DR - kre * DRN
          return(list(c(dmRNAr ,dR ,dDR, dDRN)))
 
@@ -86,6 +87,27 @@ plot(out)
 ```
 
 
+### [2]
+
+```{r}
+formula_3 <- function(t,y,parms){
+  with(as.list(c(y,parms)),{
+         D <- D * 1000 * (1 / 374.471)
+         dmRNAr <- ks_Rm * (1 - DRN/(IC50_Rm+DRN)) - kd_Rm * mRNAr
+         dR <- ks_r * mRNAr + Rf *kre *DRN - kon  * R - kd_R * R
+         dDR <- kon  * R - kT *DR
+         dDRN <- kT * DR - kre * DRN
+         return(list(c(dmRNAr ,dR ,dDR, dDRN)))
+       }
+       )
+}
+
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 14.59 )
+state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
+times <- seq(0, 168,  by = 1)
+out  <- ode(times = times, y = state, parms = parameters, func = formula_3, method = "euler")
+plot(out)
+```
 
 
 
