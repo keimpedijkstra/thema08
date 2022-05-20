@@ -7,14 +7,11 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 ! Run the week2 assignment first !
-```{r}
-library(deSolve)
-library(rootSolve)
-```
+
 ### Assignment 1: assess model validity
 
 ## [1]
-Plotting the median is good practice because we expect a good model to resemble the median.
+Plotting the mean is good practice because we expect a good model to resemble the median.
 So by plotting the median of the experimental data we can check if our model is any good.
 
 
@@ -27,6 +24,7 @@ median_MPL_01
 
 medians <- aggregate(data[,c("MPL_conc","mRNA","Free_receptor")],list(data$dose,data$time), median, na.rm=T)
 names(medians)[1:2] <- c("dose","time")
+head(medians)
 
 #prepare data for plotting
 m.d.3 <- subset(medians, dose == 0.3)
@@ -57,20 +55,22 @@ points(d.1$time, d.1$Free_receptor, pch="*")
 
 
 ## [3]
-The results of the model are not in line with the data. An explanation for this could be that the glucose level in someone's body is constantly changing. Which could result in the lines shaking due to the glucose levels that are shaking too.
+
 
 ###  Assignment 2: simulate scenario’s 
 
 ### [1]
 If the drug has no influence on the synthesis of mRNA you would expect
 
+
+
 ```{r}
 formula_2 <- function(t,y,parms){
   with(as.list(c(y,parms)),{
          D <- D * 1000 * (1 / 374.471)
-         dmRNAr <- ks_Rm * (1 - DRN/(IC50_Rm+DRN)) - kd_Rm * mRNAr
-         dR <- ks_r * mRNAr + Rf *kre *DRN - kon  * R - kd_R * R
-         dDR <- kon  * R - kT *DR
+         dmRNAr <- ks_Rm * (1 - IC50_Rm) - kd_Rm * mRNAr
+         dR <- ks_r * mRNAr + Rf *kre *DRN - kon * D * R - kd_R * R
+         dDR <- kon * D * R - kT *DR
          dDRN <- kT * DR - kre * DRN
          return(list(c(dmRNAr ,dR ,dDR, dDRN)))
 
@@ -86,52 +86,7 @@ plot(out)
 ```
 
 
-### [2]
 
-```{r}
-formula_3 <- function(t,y,parms){
-  with(as.list(c(y,parms)),{
-         D <- D * 1000 * (1 / 374.471)
-         dmRNAr <- ks_Rm * (1 - DRN/(IC50_Rm+DRN)) - kd_Rm * mRNAr
-         dR <- ks_r * mRNAr + Rf *kre *DRN - kon * D * R - kd_R * R
-         dDR <- kon * D * R - kT *DR
-         dDRN <- kT * DR - kre * DRN
-         return(list(c(dmRNAr ,dR ,dDR, dDRN)))
-       }
-       )
-}
-
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 14.59 )
-y = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
-times <- seq(0, 168,  by = 1)
-steady <- runsteady(y = y, parms = parameters, fun = formula_3, times = c(0, 1e5), atol = c(0.05, 0.05, 0.05, 0.05))
-step  <- attr(x = steady, which = "steps")
-
-```
-
-```{r}
-state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
-times <- seq(0, step,  by = 1)
-out.steady  <- as.data.frame(ode(times = times, y = state, parms = parameters, func = formula_3, method = "euler"))
-
-times <- seq(0, 200,  by = 1)
-out.no_d  <- as.data.frame(ode(times = times, y = steady$y, parms = parameters, func = formula_2, method = "euler"))
-
-frame <- rbind(out.steady, out.no_d)
-frame$new_time <- c(1:nrow(frame))
-
-plot(frame$mRNAr~frame$new_time, type='l')
-abline(v=step, col="red", lty=2)
-
-plot(frame$R~frame$new_time, type='l')
-abline(v=step, col="red", lty=2)
-
-plot(frame$DR~frame$new_time, type='l')
-abline(v=step, col="red", lty=2)
-
-plot(frame$DRN~frame$new_time, type='l')
-abline(v=step, col="red", lty=2)
-```
 
 
 

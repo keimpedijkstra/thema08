@@ -1,0 +1,5 @@
+```{r}
+xl <- readxl::read_excel('glucose_levels.xlsx')
+names(xl)
+xl
+```
