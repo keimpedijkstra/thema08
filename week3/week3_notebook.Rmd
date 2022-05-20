@@ -157,5 +157,24 @@ out.fourth <- ode(times = times, y = y, parms = parameters, func = formula_2, me
 plot(out.regular, out.first, out.second, out.third, out.fourth)
 ```
 
+```{r}
+parameters.kre <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters.kre.t5 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57*5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters.kre.t2 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57*2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters.kre.d5 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57/5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters.kre.d2 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57/2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 
+times <- seq(0, 168,  by = 1)
+state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
+
+out.kre  <- ode(times = times, y = state, parms = parameters.kre, func = formula_1, method = "euler")
+out.kre.t5  <- ode(times = times, y = state, parms = parameters.kre.t5, func = formula_1, method = "euler")
+out.kre.t2  <- ode(times = times, y = state, parms = parameters.kre.t2, func = formula_1, method = "euler")
+out.kre.d5  <- ode(times = times, y = state, parms = parameters.kre.d5, func = formula_1, method = "euler")
+out.kre.d2  <- ode(times = times, y = state, parms = parameters.kre.d2, func = formula_1, method = "euler")
+
+plot(out.kre, out.kre.t5, out.kre.t2, out.kre.d5, out.kre.d2)
+plot(out.kre, out.kre.t2, out.kre.d5, out.kre.d2)
+
+```
 
