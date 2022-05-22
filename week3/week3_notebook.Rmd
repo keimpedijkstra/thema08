@@ -24,10 +24,8 @@ So by plotting the median of the experimental data we can check if our model is 
 data <- read.csv("MPL.csv", na.strings = "NA")
 median_MPL_01 <- median(data$MPL_conc[data$dose==0.1], na.rm=T)
 median_MPL_01 
-
 medians <- aggregate(data[,c("MPL_conc","mRNA","Free_receptor")],list(data$dose,data$time), median, na.rm=T)
 names(medians)[1:2] <- c("dose","time")
-
 #prepare data for plotting
 m.d.3 <- subset(medians, dose == 0.3)
 m.d.1 <- subset(medians, dose == 0.1)
@@ -35,21 +33,17 @@ d.3 <- subset(data, dose == 0.3)
 d.1 <- subset(data, dose == 0.1)
 out.1 <- as.data.frame(out.1)
 out.3 <- as.data.frame(out.3)
-
 #plots for 0.3 dose
 plot( m.d.3$time, m.d.3$mRNA,type = "l", col = "red")
 lines(out.3$time, out.3$mRNAr)
 points(d.3$time, d.3$mRNA, pch="*")
-
 plot(m.d.3$time, m.d.3$Free_receptor, type = "l", col = "red")
 lines(out.3$time, out.3$R)
 points(d.3$time, d.3$Free_receptor, pch="*")
-
 #plots for 0.1 dose
 plot( m.d.1$time, m.d.1$mRNA,type = "l", col = "red")
 lines(out.1$time, out.1$mRNAr)
 points(d.1$time, d.1$mRNA, pch="*")
-
 plot(m.d.1$time, m.d.1$Free_receptor, type = "l", col = "red")
 lines(out.1$time, out.1$R)
 points(d.1$time, d.1$Free_receptor, pch="*")
@@ -73,11 +67,9 @@ formula_2 <- function(t,y,parms){
          dDR <- kon  * R - kT *DR
          dDRN <- kT * DR - kre * DRN
          return(list(c(dmRNAr ,dR ,dDR, dDRN)))
-
        }
        )
 }
-
 parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
 times <- seq(0, 168,  by = 1)
@@ -100,35 +92,27 @@ formula_3 <- function(t,y,parms){
        }
        )
 }
-
 parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 y = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
 times <- seq(0, 168,  by = 1)
 steady <- runsteady(y = y, parms = parameters, fun = formula_3, times = c(0, 1e5), atol = c(0.05, 0.05, 0.05, 0.05))
 step  <- attr(x = steady, which = "steps")
-
 ```
 
 ```{r}
 state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
 times <- seq(0, step,  by = 1)
 out.steady  <- as.data.frame(ode(times = times, y = state, parms = parameters, func = formula_3, method = "euler"))
-
 times <- seq(0, 200,  by = 1)
 out.no_d  <- as.data.frame(ode(times = times, y = steady$y, parms = parameters, func = formula_2, method = "euler"))
-
 frame <- rbind(out.steady, out.no_d)
 frame$new_time <- c(1:nrow(frame))
-
 plot(frame$mRNAr~frame$new_time, type='l')
 abline(v=step, col="red", lty=2)
-
 plot(frame$R~frame$new_time, type='l')
 abline(v=step, col="red", lty=2)
-
 plot(frame$DR~frame$new_time, type='l')
 abline(v=step, col="red", lty=2)
-
 plot(frame$DRN~frame$new_time, type='l')
 abline(v=step, col="red", lty=2)
 ```
@@ -139,24 +123,59 @@ abline(v=step, col="red", lty=2)
 ```{r}
 times <- seq(0, 168,  by = 1)
 y = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
-
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.regular <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
-
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329/5, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329/5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.first <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
-
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329/2, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329/2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.second <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
-
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329*5, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329*5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.third <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
-
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329*2, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329*2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.fourth <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 plot(out.regular, out.first, out.second, out.third, out.fourth)
-
 ```
 
+```{r}
+parameters.kre <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters.kre.t5 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57*5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters.kre.t2 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57*2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters.kre.d5 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57/5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+parameters.kre.d2 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57/2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+times <- seq(0, 168,  by = 1)
+state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
+out.kre  <- ode(times = times, y = state, parms = parameters.kre, func = formula_1, method = "euler")
+out.kre.t5  <- ode(times = times, y = state, parms = parameters.kre.t5, func = formula_1, method = "euler")
+out.kre.t2  <- ode(times = times, y = state, parms = parameters.kre.t2, func = formula_1, method = "euler")
+out.kre.d5  <- ode(times = times, y = state, parms = parameters.kre.d5, func = formula_1, method = "euler")
+out.kre.d2  <- ode(times = times, y = state, parms = parameters.kre.d2, func = formula_1, method = "euler")
+plot(out.kre, out.kre.t5, out.kre.t2, out.kre.d5, out.kre.d2)
+plot(out.kre, out.kre.t2, out.kre.d5, out.kre.d2)
+```
 
+[4]
+This plot shows the model with the ks_r parameter being 0. This prameter is the speedconstant of the GR mRNA synthese.
+```{r}
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 0, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
+out <- ode(times = times, y = y, parms = parameters, func = formula_1, method = "euler")
+plot(out)
+```
+[5]
+The first plots show the model that uses ks_rm = 2.9*5 and kd_Rm = 2.9*5/4.74. Whenever the formula runs when using these parameters, the plot's lines are going up and down. Which is why there's another plot showing the results without these parameters.
+```{r}
+parameters <- c(ks_Rm = 2.90/5, IC50_Rm = 26.2, kd_Rm = 2.9/5/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+out.first <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 
+parameters <- c(ks_Rm = 2.90/2, IC50_Rm = 26.2, kd_Rm = 2.9/2/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+out.second <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
+
+parameters <- c(ks_Rm = 2.90*2, IC50_Rm = 26.2, kd_Rm = 2.9*2/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+out.third <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
+
+parameters <- c(ks_Rm = 2.90*5, IC50_Rm = 26.2, kd_Rm = 2.9*5/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+out.fourth <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
+
+plot(out.first, out.second, out.third, out.fourth, ylim=c(0, 5))
+plot(out.first, out.second, out.third)
+```
