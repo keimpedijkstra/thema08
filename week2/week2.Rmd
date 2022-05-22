@@ -81,8 +81,6 @@ parameters.3 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf =
 
 formula_1 <- function(t,y,parms){
   with(as.list(c(y,parms)),{
-    
-          
          D <- D * 1000 * (1 / 374.471)
          dmRNAr <- ks_Rm * (1 - DRN/(IC50_Rm+DRN)) - kd_Rm * mRNAr
          dR <- ks_r * mRNAr + Rf *kre *DRN - kon * D * R - kd_R * R
