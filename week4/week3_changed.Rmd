@@ -74,7 +74,7 @@ parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0
 state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
 times <- seq(0, 168,  by = 1)
 out  <- ode(times = times, y = state, parms = parameters, func = formula_2, method = "euler")
-plot(out)
+plot(out, ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
 ```
 
 
@@ -107,19 +107,19 @@ times <- seq(0, 200,  by = 1)
 out.no_d  <- as.data.frame(ode(times = times, y = steady$y, parms = parameters, func = formula_2, method = "euler"))
 frame <- rbind(out.steady, out.no_d)
 frame$new_time <- c(1:nrow(frame))
-plot(frame$mRNAr~frame$new_time, type='l')
+plot(frame$mRNAr~frame$new_time, type='l', ylab="Receptor mRNA")
 abline(v=step, col="red", lty=2)
-plot(frame$R~frame$new_time, type='l')
+plot(frame$R~frame$new_time, type='l', ylab="Receptor density")
 abline(v=step, col="red", lty=2)
-plot(frame$DR~frame$new_time, type='l')
+plot(frame$DR~frame$new_time, type='l', ylab="Receptor complex concentration")
 abline(v=step, col="red", lty=2)
-plot(frame$DRN~frame$new_time, type='l')
+plot(frame$DRN~frame$new_time, type='l', ylab="Activated complex concentration")
 abline(v=step, col="red", lty=2)
 ```
 
-[5]
+[3]
 
-```{r}
+```{r error=FALSE}
 times <- seq(0, 168,  by = 1)
 y = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
 parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
@@ -132,10 +132,11 @@ parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0
 out.third <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329*2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.fourth <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
-plot(out.regular, out.first, out.second, out.third, out.fourth)
+plot(out.regular, out.first, out.second, out.third, out.fourth, ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
+legend(-65,150.5, legend = c("*1", "/5", "/2","*2","*5"), lty = c(1,2,3,4,5), title = "Subgroup", xpd="NA", col=c("black", "red", "green", "blue", "cyan"))
 ```
 
-```{r}
+```{r error=FALSE}
 parameters.kre <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 parameters.kre.t5 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57*5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 parameters.kre.t2 <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57*2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
@@ -148,8 +149,9 @@ out.kre.t5  <- ode(times = times, y = state, parms = parameters.kre.t5, func = f
 out.kre.t2  <- ode(times = times, y = state, parms = parameters.kre.t2, func = formula_1, method = "euler")
 out.kre.d5  <- ode(times = times, y = state, parms = parameters.kre.d5, func = formula_1, method = "euler")
 out.kre.d2  <- ode(times = times, y = state, parms = parameters.kre.d2, func = formula_1, method = "euler")
-plot(out.kre, out.kre.t5, out.kre.t2, out.kre.d5, out.kre.d2)
-plot(out.kre, out.kre.t2, out.kre.d5, out.kre.d2)
+plot(out.kre, out.kre.t5, out.kre.t2, out.kre.d5, out.kre.d2, ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
+plot(out.kre, out.kre.t2, out.kre.d5, out.kre.d2, ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
+legend(-65,300.5, legend = c("*1", "/5", "/2","*2","*5"), lty = c(1,2,3,4,5), title = "Subgroup", xpd="NA", col=c("black", "red", "green", "blue", "cyan"))
 ```
 
 [4]
@@ -158,11 +160,11 @@ This plot shows the model with the ks_r parameter being 0. This prameter is the 
 parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 0, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
 out <- ode(times = times, y = y, parms = parameters, func = formula_1, method = "euler")
-plot(out)
+plot(out, ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
 ```
 [5]
 The first plots show the model that uses ks_rm = 2.9*5 and kd_Rm = 2.9*5/4.74. Whenever the formula runs when using these parameters, the plot's lines are going up and down. Which is why there's another plot showing the results without these parameters.
-```{r}
+```{r error=FALSE}
 parameters <- c(ks_Rm = 2.90/5, IC50_Rm = 26.2, kd_Rm = 2.9/5/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.first <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 
@@ -175,6 +177,7 @@ out.third <- ode(times = times, y = y, parms = parameters, func = formula_2, met
 parameters <- c(ks_Rm = 2.90*5, IC50_Rm = 26.2, kd_Rm = 2.9*5/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.fourth <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 
-plot(out.first, out.second, out.third, out.fourth, ylim=c(0, 5))
-plot(out.first, out.second, out.third)
+plot(out.first, out.second, out.third, out.fourth, ylim=c(0, 5), ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
+plot(out.first, out.second, out.third, ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
+legend(-65,125.5, legend = c("*1", "/5", "/2","*2","*5"), lty = c(1,2,3,4,5), title = "Subgroup", xpd="NA", col=c("black", "red", "green", "blue", "cyan"))
 ```

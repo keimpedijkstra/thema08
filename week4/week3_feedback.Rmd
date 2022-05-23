@@ -1,0 +1,29 @@
+---
+title: "Feedback"
+output:
+  pdf_document: default
+  html_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Feedback assignment 3 John Busker
+
+### General
+The Markdown Document looks very clean overall. There's just a big amount of plots which could be kinda confusing. A solution for this is in [Assignment 2].
+
+### Assignment 1
+Assignment 1 looks good. for the median question, the explanation could be better. It mostly describes what a median is. Instead of why it's used. The plots are well explained, and look good with a nice little legend. The only thing that's missing in the last question is the last two plots.
+
+### Assignment 2
+The first question needs to have a change in the D parameter. The question says that the drug shouldn't have influence on the synthesis of the receptor. There's still other parameters which influence it.
+
+The plots in question two look good, but could maybe have a line in the middle to show where the medicine is stopped.
+
+Question three involves a lot of plots. A better way to compare the different results would be having them in on plot. This would show the difference very clearly.
+
+The third question's plot doesn't really show what you have changed to get this result. It only describes the plot itself. 
+
+For the last question there's the same thing. The 4 plots could be one with multiple lines. Which would lead to a cleaner plot.
