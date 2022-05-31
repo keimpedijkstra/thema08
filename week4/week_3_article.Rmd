@@ -86,7 +86,7 @@ points(d.1$time, d.1$Free_receptor, pch="*")
 legend(100,300, legend = c("median data", "Model", "Data"), lty = c(1, 1, 3), title = "Subgroup", xpd="NA", col=c("red", "black", "black"))
 mtext("Model VS actual data", side = 3, line = -1, outer = TRUE)
 ```
-The results of the model are not in line with the data. An explanation for this could be that the glucose level in someone's body is constantly changing. Which could result in the lines shaking due to the glucose levels that are shaking too.
+The results of the model are not in line with the data. The red line is going up and down. The general shape kind of follows the model though. An explanation for this could be that the glucose level in someone's body is constantly changing. Which could result in the lines shaking due to the glucose levels that are shaking too.
 
 ```{r echo=FALSE, warning=FALSE}
 formula_2 <- function(t,y,parms){
@@ -105,9 +105,9 @@ state = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
 times <- seq(0, 168,  by = 1)
 out  <- ode(times = times, y = state, parms = parameters, func = formula_2, method = "euler")
 plot(out, ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
-mtext("Data when D isn't involved", side = 3, line = -12, outer = TRUE)
+mtext("Formula when D isn't involved", side = 3, line = -12, outer = TRUE)
 ```
-If the drug has no influence on the synthesis of mRNA you would expect this. 
+If the drug has no influence on the synthesis of mRNA this would be expected. The main differences are that the levels of the Receptor mRNA and the receptor density are now higher, and the Receptor complex concentration and the Activated complex concentration are now lower.
 
 ```{r echo=FALSE}
 formula_3 <- function(t,y,parms){
@@ -149,6 +149,8 @@ abline(v=step, col="red", lty=2)
 legend(5,107, legend = c("Border influence D to no influence"), lty = c(2), title = "Subgroup", xpd="NA", col=c("red", "black", "black"))
 mtext("Formula to formula when D has no influence", side = 3, line = -1, outer = TRUE)
 ```
+This plot shows the normal process until the steady state is reached. When it's reached the formula will run with the end worths. Except for the D that will now be 0. The formula will run from there until a new steady state is reached.
+
 ```{r error=FALSE, echo=FALSE}
 times <- seq(0, 168,  by = 1)
 y = c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0)
@@ -158,13 +160,14 @@ parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0
 out.first <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329/2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.second <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
-parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329*5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
-out.third <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
 parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329*2, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
+out.third <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
+parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.00329*5, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
 out.fourth <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
-plot(out.regular, out.first, out.second, out.third, out.fourth, ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
-legend(-65,150.5, legend = c("*1", "/5", "/2","*2","*5"), lty = c(1,2,3,4,5), title = "Subgroup", xpd="NA", col=c("black", "red", "green", "blue", "cyan"))
+plot(out.regular, out.first, out.second, out.third, out.fourth, ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"), col=rainbow(5))
+legend(-65,150.5, legend = c("*1", "/5", "/2","*2","*5"), lty = c(1,2,3,4,5), title = "Subgroup", xpd="NA", col=rainbow(5))
 ```
+This plot shows the change of results whenever the kre variable changes. The receptor mRNA, Receptor density and the Receptor complex concentration will lower more slowly whenever the value is higher. The Activated complex concentration however lowers faster the higher the value is. 
 
 ```{r error=FALSE, echo=FALSE, warning=FALSE}
 parameters.kre <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
@@ -200,21 +203,21 @@ This plot shows the model with the ks_r parameter being 0. This prameter is the 
 
 ```{r error=FALSE, echo=FALSE, warning=FALSE}
 parameters <- c(ks_Rm = 2.90/5, IC50_Rm = 26.2, kd_Rm = 2.9/5/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
-out.first <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
+out.first <- ode(times = times, y = y, parms = parameters, func = formula_1, method = "euler")
 
 parameters <- c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 2.9/5/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
-out.reg <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
+out.reg <- ode(times = times, y = y, parms = parameters, func = formula_1, method = "euler")
 
 parameters <- c(ks_Rm = 2.90/2, IC50_Rm = 26.2, kd_Rm = 2.9/2/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
-out.second <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
+out.second <- ode(times = times, y = y, parms = parameters, func = formula_1, method = "euler")
 
 parameters <- c(ks_Rm = 2.90*2, IC50_Rm = 26.2, kd_Rm = 2.9*2/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
-out.third <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
+out.third <- ode(times = times, y = y, parms = parameters, func = formula_1, method = "euler")
 
 parameters <- c(ks_Rm = 2.90*5, IC50_Rm = 26.2, kd_Rm = 2.9*5/4.74, ks_r = 3.22, Rf = 0.49, kre = 0.00329, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 )
-out.fourth <- ode(times = times, y = y, parms = parameters, func = formula_2, method = "euler")
+out.fourth <- ode(times = times, y = y, parms = parameters, func = formula_1, method = "euler")
 
-plot(out.regular, out.first, out.second, out.third, out.fourth, ylim=c(0, 5), ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
+plot(out.reg, out.first, out.second, out.third, out.fourth, ylim=c(0, 5), ylab=c("Receptor mRNA", "Receptor density", "Receptor complex concentration", "Activated complex concentration"))
 legend(150,10, legend = c("*1", "/5", "/2","*2","*5"), lty = c(1,2,3,4,5), title = "Subgroup", xpd="NA", col=c("black", "red", "green", "blue", "cyan"))
 ```
 
