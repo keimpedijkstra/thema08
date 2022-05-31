@@ -42,10 +42,54 @@ out.3  <- ode(times = times, y = state, parms = parameters.3, func = formula_1, 
 \newpage
 
 ## Introduction
+This project involves the validation and testing of a mathematical model regarding the expression of glucocorticoid receptors where the expression is regulated by corticosteroids.
+The corticosteroids regulate the transcription of inflammatory response genes, making them a great candidate for a possible drug.
+
+Corticosteroids, also called adrenal cortex hormones, are steroids that are produced in the 
+adrenal glands. The steroids are a derivative of the cholesterol molecules, are hydrophobic and typically remain in the cytosol. The corticosteroids are divisible in two groups:  
+Glucocorticoids and Mineralocorticoids. We will focus on the Glucocorticoids, these steroids regulate the metabolism of glucose. Besides promoting the synthesis of glucose the steroid also has other functions, including:
+* fat distribution
+* suppressing the immune response
+*suppressing inflammation
+* promoting the breakdown of proteins
+
+The corticosteroid of choice is methylprednisolone(MPL), it is a widely used drug to treat inflammatory diseases such as asthma, rheumatism and lupus. MPL slows down the inflammatory response by binding to transcription factors that regulate transcription of genes involved in the inflammatory response. Besides that, they also slow down the synthesis of their own receptors by binding the steroid-receptor complex to the response elements.
+
+Our main goal is to validate a mathematical model, we do this by running simulations in R using the desolve and rootsolve packages. These packages solve differential equations, so that way we can simulate and plot the model with various changes in parameters and states to compare them. The mathematical model describes the glucocorticoid receptor dynamics, including the synthesis of receptor mRNA, the vorming of the receptor-complex and its recycling, and ofcourse the influence of MPL concentrations. The model will be compared against real world experimental data to study its effectiveness.
+
 
 \newpage
 
-## Materials & Methods
+## The model
+
+
+The model describes the interaction between MPL and the receptor, this can be written as four distinct ordinary differential equations (ODE’s).
+
+![image](model.png)
+
+The first equation calculates the amount of receptor mRNA(mRNAr) by using the Ks_rm, the rate of mRNA synthesis. The amount of MPL-receptor complex in the nucleus, DR(N). IC50_rm, the concentration DR(N) where the synthesis of receptor mRNA decreases by 50 percent compared to base value. And finally Kd_rm, the rate of degradation of the mRNA receptor. 
+
+The second equation calculates the derivative of the density of the glucocorticoid receptor with which no complex has been formed. It does this by firstly multiplying the rate of receptor synthesis (Ks_r) by the amount of  mRNAr. After which we add the Fraction of the free receptor that will be recycled multiplied by the recovery of the receptor from the nucleus to the cytosol (Kre) and finally multiplied by DR(N). And the third step is subtracting the concentration MPL (D) times the density of the glucocorticoid receptor  (R) multiplied by Kon, the second order rate constant of MPL-complex synthesis. And finally we also subtract the rate of receptor degradation (Kd_r) times R.
+
+The third formula calculates the new value for DR, the density of MPL receptor complex. 
+It does this by multiplying Kon, D and R. And from that subtract Kt, the rate of translocation of the receptor complex from cytosol to the nucleus, times DR.
+
+The final formula determines the derivative for DR(N) by multiplying Kt by DR and subtracting Kre times DR(N).
+
+![image](flow.png)
+
+The timescale is in hours, so that means the unit of Kt, Kre and Kd_r is 1 over an hour.
+The unit of all the initial values except Rmo and IC50_rm, the starting level of mRNAr, are in fmol/mg protein. Rmo is in fmol / g, situated in the liver as is Ks_rm. The numerical values are shown in the table below, these are based upon experimental data from rats. 
+
+
+```{r}
+values <- as.data.frame(c(ks_Rm = 2.90, IC50_Rm = 26.2, kd_Rm = 0.612, ks_r = 3.22, Rf = 0.49, kre = 0.57, kon = 0.00329, kd_R = 0.0572, kT = 0.63, D = 20 ))
+print("values")
+values
+print("initial values")
+initial <- as.data.frame(c(mRNAr = 4.74, R = 267 ,DR = 0, DRN = 0))
+initial
+```
 
 \newpage
 
