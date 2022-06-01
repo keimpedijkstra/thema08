@@ -1,0 +1,40 @@
+Parameter 	Symbol 	Unit 	Spring 	Summer 	Fall 	Winter 	References
+Max. eclosion rate 	𝛽
+	Bees/days 	500 	1500 	500 	0 	[20]
+Brood maintenance coefficient 	𝜅
+	Bees 	8000 	12,000 	8000 	6000 	[14]
+Base recruitment rate 	𝜎1
+	1/days 	0.25 	0.25 	0.25 	0 	[10]
+Max. feedback rate 	𝜎2
+	1/days 	1.5 	1.5 	1.5 	1.5 	[13]
+𝐻0
+death rate 	𝜂0
+	1/days 	0 	0 	0 	0.00649 	[18]
+𝐻1
+death rate 	𝜂1
+	1/days 	0 	0 	0 	0.00649 	[18]
+𝐹0
+death date 	𝜙0
+	1/days 	0.08511 	0.08511 	0.08511 	0 	[1]
+𝐹1
+death date 	𝜙1
+	1/days 	0.16936 	0.16936 	0.16936 	0 	[1, 6]
+Infection rate 	𝛼
+	1/days 	0.55 	0.12 	0.24 	0 	[12]
+Spore deposition rate 	𝛾
+	 env.pot.  bees *  days 
+	0.2061𝛾𝑊
+	0.2835𝛾𝑊
+	0.2527𝛾𝑊
+	𝛾𝑊
+	[13]
+Spore viability decay rate 	𝛿
+	1/days 	0.006570 	0.023300 	0.015683 	0 	[13]
+Spore uptake rate 	𝛼̃ 
+	 env.pot.  bees *  days 
+	0.14 	0.14 	0.14 	0.14 	[13]
+Half saturation const. for E. potential 	𝜆
+	 env.pot.  days 
+	10,000 	10,000 	10,000 	10,000 	[13]
+Hill exponent disease transmission 	n 	– 	2 	2 	2 	2 	[13]
+Parameter 	p 	– 	1% 	– 	– 	– 	Assumed 
