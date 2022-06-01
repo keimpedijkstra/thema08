@@ -1,0 +1,85 @@
+```{r echo=FALSE}
+
+library(deSolve)
+
+parameters <- read.table("parameters.txt", sep="\t")
+colnames(parameters) <- parameters[1,]
+parameters <- parameters[2:nrow(parameters),]
+parameters
+```
+
+```{r}
+parameters.spring <- c(β=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.55, γ=0.2061, δ=0.006570, α_t=0.14, λ=10000, n=2, p=1)
+parameters.summer <- c(β=1500, κ=12000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.12, γ=0.2835, δ=0.023300, α_t=0.14, λ=10000, n=2, p=0)
+parameters.fall <- c(β=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.24, γ=0.2527, δ=0.015683, α_t=0.14, λ=10000, n=2, p=0)
+parameters.winter <- c(β=0, κ=6000, σ1=0, σ2=1.5, η0=0.00649, η1=0.00649, ϕ0=0, ϕ1=0, α=0, γ=0, δ=0, α_t=0.14, λ=10000, n=2, p=0)
+
+formula <- function(t,y,parms){
+  with(as.list(c(y,parms)),{
+    
+          Hi <- Hi0 + Hi1
+          Fi <- Fi0 + Fi1
+          Zi <- Hi + Fi
+    
+          dHi0 = β*( ( (Zi)**n ) / (κ**n+(Zi)**n) ) -σ1 * Hi0+σ2 * (Fi/Zi) * Fi0 - η0 * Hi0 - α* Hi0* ( Ei / λ+Ei)
+
+          dHi1 = -σ1 * Hi1 + σ2 * (Fi/Zi) * Fi1 -η1 * Hi1+ α * Hi0 * (Ei / (λ+Ei))
+
+          dFi0 = σ1 * Hi0 - (σ2 * (Fi/Zi) +ϕ0) *Fi0
+
+          dFi1 = σ1 * Hi1 - (σ2 * (Fi / Zi) + ϕ1) *Fi1
+            
+          dEi <- γ * Hi1 - δ * Ei - α_t * Hi * (Ei / λ + Ei)
+            
+          return(list(c(dHi0, dHi1, dFi0, dFi1, dEi)))
+       }
+       )
+}
+state = c(Hi0=10**4, Hi1=0, Fi0=10**4, Fi1=0, Ei=0)
+times <- seq(0, 364 / 4,  by = 1)
+
+gen_formula <- function(state) {
+  out.spring <- as.data.frame(ode(times = times, y = state, parms = parameters.spring, func = formula, method = "euler"))
+
+  state <- c(Hi0=out.spring[nrow(out.spring), 2], Hi1=out.spring[nrow(out.spring), 3], Fi0=out.spring[nrow(out.spring), 4], Fi1=out.spring[nrow(out.spring), 5], Ei=out.spring[nrow(out.spring), 6])
+out.summer <- as.data.frame(ode(times = times, y = state, parms = parameters.summer, func = formula, method = "euler"))
+
+  state <- c(Hi0=out.summer[nrow(out.summer), 2], Hi1=out.summer[nrow(out.summer), 3], Fi0=out.summer[nrow(out.summer), 4], Fi1=out.summer[nrow(out.summer), 5], Ei=out.summer[nrow(out.summer), 6])
+out.fall <- as.data.frame(ode(times = times, y = state, parms = parameters.fall, func = formula, method = "euler"))
+
+  state <- c(Hi0=out.fall[nrow(out.fall), 2], Hi1=out.fall[nrow(out.fall), 3], Fi0=out.fall[nrow(out.fall), 4], Fi1=out.fall[nrow(out.fall), 5], Ei=out.fall[nrow(out.fall), 6])
+  out.winter <- as.data.frame(ode(times = times, y = state, parms = parameters.winter, func = formula, method = "euler"))  
+  
+  out.summer$time <- out.summer$time+ (364/4)
+  out.fall$time <- out.fall$time + 2*(364/4)
+  out.winter$time <- out.winter$time + 3*(364/4)
+  
+  out.year <- rbind(out.spring, out.summer, out.fall, out.winter)
+  return(list(out.year, out.winter))
+}
+
+out.1 <- gen_formula(state)
+
+out.winter <- as.data.frame(out.1[2])
+state <- c(Hi0=out.winter[nrow(out.winter), 2], Hi1=out.winter[nrow(out.winter), 3], Fi0=out.winter[nrow(out.winter), 4], Fi1=out.winter[nrow(out.winter), 5], Ei=out.winter[nrow(out.winter), 6])
+out.2 <- gen_formula(state)
+
+out.winter <- as.data.frame(out.2[2])
+state <- c(Hi0=out.winter[nrow(out.winter), 2], Hi1=out.winter[nrow(out.winter), 3], Fi0=out.winter[nrow(out.winter), 4], Fi1=out.winter[nrow(out.winter), 5], Ei=out.winter[nrow(out.winter), 6])
+out.3 <- gen_formula(state)
+
+out.1.frame <- as.data.frame(out.1[2])
+out.2.frame <- as.data.frame(out.2[2])
+out.3.frame <- as.data.frame(out.3[2])
+
+
+out.2.frame$time <- out.2.frame$time + 365
+out.3.frame$time <- out.3.frame$time + 2*365
+out.year <- as.data.frame(rbind(out.1.frame, out.2.frame, out.3.frame))
+#out.year$time <- c(1:nrow(out.year))
+
+plot(out.year$time, out.year$Hi0, type="l", ylim=c(0, 35000))
+lines(out.year$time, out.year$Fi0, lty=2)
+lines(out.year$time, out.year$Hi1, lty=3)
+lines(out.year$time, out.year$Fi1, lty=4)
+```
