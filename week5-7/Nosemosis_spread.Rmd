@@ -34,8 +34,10 @@ formula <- function(t,y,parms){
             
           dEi <- γ * Hi1 - δ * Ei - α_t * Hi * (Ei / λ + Ei)
           
-          dEk <- (1 - 𝜉* p) * Ek + p * c() * Ei
-  
+          grid <- c(2, 4, 5, 23, 5, 10, 7)
+          dEk <- lim((1 - 𝜉* p) * Ek + p * grid * Ei)[2]
+          print(lim((1 - 𝜉* p) * Ek + p * grid * Ei))
+          
           return(list(c(dHi0, dHi1, dFi0, dFi1, dEi, dEk)))
        }
        )
@@ -89,19 +91,30 @@ lines(out.year$time, out.year$Hi1, lty=3, col=rainbow(2)[2])
 lines(out.year$time, out.year$Fi1, lty=4, col=rainbow(3)[3])
 axis(1, at=seq(from=1, to=364*3, by = 364 / 4), labels=c("Sp", "S", "F", "W", "Sp", "S", "F", "W", "Sp", "S", "F", "W"))
 legend(965, 36400, legend = c("H0", "H1", "F0", "F1"), lty = c(1, 2, 3, 4), title = "Subgroup", xpd="NA", col=rainbow(3))
-plot(out.year$Ei, xaxt="n")
+plot(out.year$Ei, xaxt="n", type="l")
 axis(1, at=seq(from=1, to=364*3, by = 364 / 4), labels=c("Sp", "S", "F", "W", "Sp", "S", "F", "W", "Sp", "S", "F", "W"))
 ```
 ```{r}
 out.years <- data.frame()
 
-index <- 1
-out.winter.state <- 
+index <- 0
+winter.state <- c(Hi0=10**4, Hi1=0, Fi0=10**4, Fi1=0, Ei=0, Ek=0.1)
 while (index < 51) {
   index <- index + 1
   
-  out.winter <- as.data.frame(out.2[1])
-  state <- c(Hi0=out.winter[nrow(out.winter), 2], Hi1=out.winter[nrow(out.winter), 3], Fi0=out.winter[nrow(out.winter), 4], Fi1=out.winter[nrow(out.winter), 5], Ei=out.winter[nrow(out.winter), 6])
+  out.year <- as.data.frame(gen_formula(winter.state))
+  out.year$time <- out.year$time + 364 * index - 1
+  out.years <- rbind(out.years, out.year)
+  winter.state <- c(Hi0=out.year[nrow(out.year), 2], Hi1=out.year[nrow(out.year), 3], Fi0=out.year[nrow(out.year), 4], Fi1=out.year[nrow(out.year), 5], Ei=out.year[nrow(out.year), 6], Ek=out.year[nrow(out.year), 7])
   
 }
+
+plot(out.years$Hi0 ~ out.years$time, type="l")
+```
+
+```{r}
+state = c(Hi0=10**4, Hi1=0, Fi0=10**4, Fi1=0, Ei=0, Ek=0.1)
+
+out.spring <- as.data.frame(ode(times = times, y = state, parms = parameters.spring, func = formula, method = "euler"))
+plot(out.spring$Ek)
 ```
