@@ -34,9 +34,8 @@ formula <- function(t,y,parms){
             
           dEi <- γ * Hi1 - δ * Ei - α_t * Hi * (Ei / λ + Ei)
           
-          grid <- c(2, 4, 5, 23, 5, 10, 7)
-          dEk <- lim((1 - 𝜉* p) * Ek + p * grid * Ei)[2]
-          print(lim((1 - 𝜉* p) * Ek + p * grid * Ei))
+          grid <- c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+          dEk[k] <- max((1 - 𝜉* p) * Ek + p * grid * Ei)
           
           return(list(c(dHi0, dHi1, dFi0, dFi1, dEi, dEk)))
        }
