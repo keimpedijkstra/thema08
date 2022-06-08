@@ -93,6 +93,8 @@ legend(965, 36400, legend = c("H0", "H1", "F0", "F1"), lty = c(1, 2, 3, 4), titl
 plot(out.year$Ei, xaxt="n", type="l")
 axis(1, at=seq(from=1, to=364*3, by = 364 / 4), labels=c("Sp", "S", "F", "W", "Sp", "S", "F", "W", "Sp", "S", "F", "W"))
 ```
+
+
 ```{r}
 out.years <- data.frame()
 
@@ -107,7 +109,8 @@ while (index < 51) {
   winter.state <- c(Hi0=out.year[nrow(out.year), 2], Hi1=out.year[nrow(out.year), 3], Fi0=out.year[nrow(out.year), 4], Fi1=out.year[nrow(out.year), 5], Ei=out.year[nrow(out.year), 6], Ek=out.year[nrow(out.year), 7])
   
 }
-<<<<<<< HEAD
+
+plot(out.years$Hi0 ~ out.years$time, type="l")
 ```
 
 
@@ -167,21 +170,4 @@ p <- 0.01
 times <= c(1)
 state = c(Hi0=10**4, Hi1=0, Fi0=10**4, Fi1=0, Ei=0, Ek=0)
 
-
-
 ``` 
-
-
-
-=======
-
-plot(out.years$Hi0 ~ out.years$time, type="l")
-```
-
-```{r}
-state = c(Hi0=10**4, Hi1=0, Fi0=10**4, Fi1=0, Ei=0, Ek=0.1)
-
-out.spring <- as.data.frame(ode(times = times, y = state, parms = parameters.spring, func = formula, method = "euler"))
-plot(out.spring$Ek)
-```
->>>>>>> 03b289870310ab4eb6bdfeda07c9b237a545dbe4
