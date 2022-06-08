@@ -5,6 +5,7 @@ output:
 ---
 ```{r echo=FALSE}
 library(deSolve)
+library(icesTAF)
 parameters <- read.table("parameters.txt", sep="\t")
 colnames(parameters) <- parameters[1,]
 parameters <- parameters[2:nrow(parameters),]
@@ -33,8 +34,8 @@ formula <- function(t,y,parms){
             
           dEi <- γ * Hi1 - δ * Ei - α_t * Hi * (Ei / λ + Ei)
           
-          dEk <- max((1 - 𝜉* p) * Ek + p * 1 * Ei)
-            
+          dEk <- (1 - 𝜉* p) * Ek + p * c() * Ei
+  
           return(list(c(dHi0, dHi1, dFi0, dFi1, dEi, dEk)))
        }
        )
