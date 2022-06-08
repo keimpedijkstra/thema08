@@ -105,3 +105,67 @@ while (index < 51) {
   
 }
 ```
+
+
+
+apiary setup
+```{r}
+library("Dict")
+
+n1 <- 6
+n2 <- 5
+
+total <- n1*n2
+hives <- seq(1,total)
+
+apiary_creation <- function(n1, n2, total, hives){
+  hive <- 1
+  
+  apiary <- Dict$new("temp"=0)
+  
+  while (hive <= length(hives)){
+    #determine the neigbors of the current hive
+    neighbors <- c(hive-1, hive+1, hive-n1, hive+n1, hive-n1-1, hive-n1+1, hive+n1-1, hive+n1+1)
+    neighbors <- neighbors[neighbors > 0]
+    neighbors <- neighbors[neighbors <= total]
+    
+    #left
+    if(hive %% n1 == 1){
+      neighbors <- neighbors[neighbors != hive+n1-1]
+      neighbors <- neighbors[neighbors != hive-1]
+      neighbors <- neighbors[neighbors != hive-n1-1]
+    }
+    #right
+    if(hive %% n1 == 0){
+      neighbors <- neighbors[neighbors != hive+1]
+      neighbors <- neighbors[neighbors != hive-n1+1]
+      neighbors <- neighbors[neighbors != hive+n1+1]
+    }
+    apiary[as.character(hive)] <- neighbors
+    hive <- hive +1
+  }
+  apiary$remove("temp")
+  return(apiary)
+}
+
+apiary <- apiary_creation(n1, n2, total, hives)
+
+```
+
+```{r}
+spore_rate <-c(10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+spore_rate_updated <-c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+
+alpha <- 0.15
+gamma <- 0.1
+p <- 0.01
+
+times <= c(1)
+state = c(Hi0=10**4, Hi1=0, Fi0=10**4, Fi1=0, Ei=0, Ek=0)
+
+
+
+``` 
+
+
+
