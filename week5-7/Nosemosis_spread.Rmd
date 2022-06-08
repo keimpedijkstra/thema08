@@ -160,14 +160,23 @@ apiary <- apiary_creation(n1, n2, total, hives)
 ```
 
 ```{r}
-spore_rate <-c(10,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
-spore_rate_updated <-c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
-
 alpha <- 0.15
 gamma <- 0.1
 p <- 0.01
 
-times <= c(1)
 state = c(Hi0=10**4, Hi1=0, Fi0=10**4, Fi1=0, Ei=0, Ek=0)
+Ek <- c(1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+Ek_updated <-c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+
+ev_simulation <- function (state, p, apiary, Ek){
+  k <- 1  
+  while(k <= length(apiary)){
+  dEk <- lim((1 - length(apiary$get(k)) * p) * Ek[k] + p * sum(Ek))[2]
+  k <- k+1
+  Ek_updated[k] <- dEk
+  }
+  Ek <- Ek_updated
+  return(Ek)
+}
 
 ``` 
