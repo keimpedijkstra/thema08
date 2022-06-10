@@ -12,10 +12,10 @@ parameters <- parameters[2:nrow(parameters),]
 ```
 
 ```{r error=FALSE, warning=FALSE, echo=FALSE}
-parameters.spring <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.55, γ=0.2061, δ=0.006570, α_t=0.14, λ=10000, n=2, p=1, 𝜉=8)
-parameters.summer <- c(b=1500, κ=12000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.12, γ=0.2835, δ=0.023300, α_t=0.14, λ=10000, n=2, p=0, 𝜉=8)
-parameters.fall <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.24, γ=0.2527, δ=0.015683, α_t=0.14, λ=10000, n=2, p=0, 𝜉=8)
-parameters.winter <- c(b=0, κ=6000, σ1=0, σ2=1.5, η0=0.00649, η1=0.00649, ϕ0=0, ϕ1=0, α=0, γ=0, δ=0, α_t=0.14, λ=10000, n=2, p=0, 𝜉=8)
+parameters.spring <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.55, γ=0.2061, δ=0.006570, α_t=0.14, λ=10000, n=2, p=1, 𝜉=8, alpha=0.15)
+parameters.summer <- c(b=1500, κ=12000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.12, γ=0.2835, δ=0.023300, α_t=0.14, λ=10000, n=2, p=0, 𝜉=8, alpha=0.15)
+parameters.fall <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.24, γ=0.2527, δ=0.015683, α_t=0.14, λ=10000, n=2, p=0, 𝜉=8, alpha=0.15)
+parameters.winter <- c(b=0, κ=6000, σ1=0, σ2=1.5, η0=0.00649, η1=0.00649, ϕ0=0, ϕ1=0, α=0, γ=0, δ=0, α_t=0.14, λ=10000, n=2, p=0, 𝜉=8, alpha=0.15)
 
 formula <- function(t,y,parms){
   with(as.list(c(y,parms)),{
@@ -24,7 +24,7 @@ formula <- function(t,y,parms){
           Fi <- Fi0 + Fi1
           Zi <- Hi + Fi
     
-          dHi0 = b*( ( (Zi)**n ) / (κ**n+(Zi)**n) ) -σ1 * Hi0+σ2 * (Fi/Zi) * Fi0 - η0 * Hi0 - α* Hi0* ( Ei / λ+Ei)
+          dHi0 = b*( ( (Zi)**n ) / (κ**n+(Zi)**n) ) -σ1 * Hi0+σ2 * (Fi/Zi) * Fi0 - η0 * Hi0 - α* Hi0* ( Ei / (λ+Ei))
 
           dHi1 = -σ1 * Hi1 + σ2 * (Fi/Zi) * Fi1 -η1 * Hi1+ α * Hi0 * (Ei / (λ+Ei))
 
@@ -32,7 +32,7 @@ formula <- function(t,y,parms){
 
           dFi1 = σ1 * Hi1 - (σ2 * (Fi / Zi) + ϕ1) *Fi1
             
-          dEi <- γ * Hi1 - δ * Ei - α_t * Hi * (Ei / λ + Ei)
+          dEi <- γ * Hi1 - δ * Ei - alpha * Hi * (Ei / (λ + Ei))
 
           
           return(list(c(dHi0, dHi1, dFi0, dFi1, dEi)))
@@ -173,7 +173,7 @@ ev_simulation <- function (p, apiary, Ek){
   Ek_updated <-c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
   
   while(k <= length(apiary)){
-  dEk <- max((1 - length(apiary$get(k)) * p) * Ek[k] + p * sum(Ek))[2]
+  dEk <- lim((1 - length(apiary$get(k)) * p) * Ek[k] + p * sum(Ek))[2]
   Ek_updated[k] <- dEk
   k <- k+1
   }
@@ -193,12 +193,18 @@ plot(c, type="l")
 
 
 ```{r}
+
+parameters.spring <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.55, γ=0.1, δ=0.006570, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
+parameters.summer <- c(b=1500, κ=12000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.12, γ=0.1, δ=0.023300, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
+parameters.fall <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.24, γ=0.1, δ=0.015683, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
+parameters.winter <- c(b=0, κ=6000, σ1=0, σ2=1.5, η0=0.00649, η1=0.00649, ϕ0=0, ϕ1=0, α=0, γ=0.1, δ=0, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
+
 out.years <- data.frame()
 
 index <- 0
 winter.state <- c(Hi0=10**4, Hi1=0, Fi0=10**4, Fi1=0, Ei=0)
 
-Ek <- c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
+Ek <- c(1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
 
 hives.state <- data.frame(matrix(ncol=30, nrow = 30 * 5))
 hives.ek <- data.frame(matrix(ncol=30, nrow=30))
@@ -209,20 +215,19 @@ while (index < 30) {
     if (index == 1) {
       winter.state <- c(Hi0=10**4, Hi1=0, Fi0=10**4, Fi1=0, Ei=Ek[index2])
     } else {
-      winter.state <- c(Hi0=hives.state[(index - 2) * 5 + 1, index2], Hi1=hives.state[(index - 2) * 5 + 2, index2], Fi0=hives.state[(index - 2) * 5 + 3, index2], Fi1=hives.state[(index - 2) * 5 + 4, index2], Ei=hives.ek[index-1,])
+      winter.state <- c(Hi0=hives.state[(index - 2) * 5 + 1, index2], Hi1=hives.state[(index - 2) * 5 + 2, index2], Fi0=hives.state[(index - 2) * 5 + 3, index2], Fi1=hives.state[(index - 2) * 5 + 4, index2], Ei=hives.ek[index-1,index2])
     }
-    out.year <- as.data.frame(gen_formula(winter.state))
-    out.year$time <- out.year$time + 364 * index - 1
-    out.years <- rbind(out.years, out.year)
+    
+    
+    
+    out.year <- as.data.frame(gen_formula(winter.state)[1])
     
     
     x <- 1 + ((index - 1) * 5)
     y <- 5 + ((index - 1) * 5)
+    print(c(out.year[nrow(out.year), 2], out.year[nrow(out.year), 3], out.year[nrow(out.year), 4], out.year[nrow(out.year), 5], out.year[nrow(out.year), 6]))
     hives.state[x:y,index2] <- c(out.year[nrow(out.year), 2], out.year[nrow(out.year), 3], out.year[nrow(out.year), 4], out.year[nrow(out.year), 5], out.year[nrow(out.year), 6])
     
-    
-    
-    Ek[index2] <- out.year[nrow(out.year), 6]
                          
     index2 <- index2 +1
   }
@@ -230,6 +235,5 @@ while (index < 30) {
   
 
 }
-
-
+plot(hives.ek[,1])
 ```
