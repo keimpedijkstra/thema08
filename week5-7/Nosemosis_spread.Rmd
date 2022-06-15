@@ -170,7 +170,7 @@ ev_simulation <- function (p, apiary, Ek, year){
   k <- 1
   Ek_updated <-c(0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0)
   
-  while(k <= length(apiary)){
+  while(k <= apiary$length){
     neighbour.ek <- Ek[apiary$get(k)]
     x <- (1 - length(apiary$get(k)) * p) * Ek[k] + p * sum(neighbour.ek)
     x <- as.numeric(x)
@@ -218,9 +218,9 @@ gen_formula_infected <- function(state, first_winter, hive) {
 
 hives <- c(1)
 
-parameters.spring <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.55, γ=0.2061 * 0.1, δ=0.006570, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
-parameters.summer <- c(b=1500, κ=12000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.12, γ=0.2835 * 0.1, δ=0.023300, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
-parameters.fall <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.24, γ=0.2527 *0.1, δ=0.015683, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
+parameters.spring <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.55, γ=0.1, δ=0.006570, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
+parameters.summer <- c(b=1500, κ=12000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.12, γ=0.1, δ=0.023300, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
+parameters.fall <- c(b=500, κ=8000, σ1=0.25, σ2=1.5, η0=0, η1=0, ϕ0=0.08511, ϕ1=0.16936, α=0.24, γ=0.1, δ=0.015683, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
 parameters.winter <- c(b=0, κ=6000, σ1=0, σ2=1.5, η0=0.00649, η1=0.00649, ϕ0=0, ϕ1=0, α=0, γ=0.1, δ=0, α_t=0.14, λ=10000, n=2, p=0.01, 𝜉=8, alpha=0.15)
 
 out.years <- data.frame()
@@ -248,7 +248,7 @@ while (index < 30) {
     
     out.year <- as.data.frame(gen_formula_infected(winter.state, index, index2)[1])
     #if (index2 %in% hives) {
-    if (index2 == 15) {
+    if (index2 == 30) {
       
       temp.ei <- as.data.frame(out.year$Ei)
       names(temp.ei)[1] <- "Ei"
@@ -258,7 +258,6 @@ while (index < 30) {
     
     x <- 1 + ((index - 1) * 5)
     y <- 5 + ((index - 1) * 5)
-    #print(c(out.year[nrow(out.year), 2], out.year[nrow(out.year), 3], out.year[nrow(out.year), 4], out.year[nrow(out.year), 5], out.year[nrow(out.year), 6]))
     hives.state[x:y,index2] <- c(out.year[nrow(out.year), 2], out.year[nrow(out.year), 3], out.year[nrow(out.year), 4], out.year[nrow(out.year), 5], out.year[nrow(out.year), 6])
     
                          
@@ -268,7 +267,8 @@ while (index < 30) {
   
 
 }
-plot(hives.ei[,1]~seq(1, nrow(hives.ei)), type="l")
+plot(hives.ei[,1]~seq(1, nrow(hives.ei)), type="l", xaxt="n")
+#axis(1, at=seq(from=1, to=364*30, by = 364 / 30 / 5), labels=)
 ```
 
 ```{r}
