@@ -1,4 +1,4 @@
-Keimpe Dijkstra & Wouterr Zeevat
+Keimpe Dijkstra & Wouter Zeevat
 6/19/2022
 1.0.0
 
