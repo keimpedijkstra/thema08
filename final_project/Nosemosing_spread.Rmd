@@ -9,7 +9,7 @@ date: '2022-06-19'
 
 ### Introduction
 
-Nosemosis is a big problem especially in North America. It is causing a lot of bees to die which is leading to a honeybee crisis in North America, It is even starting to become a problem in Europe now aswell. Nosemosis is a diseased caused by two different species of microsporidian parasites, That are a type of fungus that form spores. Whenever a bee becomes infected, it has problems digesting food, which leads to a shorter lifespan. Whenever a colony's queen gets infected, they will stop laying eggs. All leading to the whole colony dying [1].
+Nosemosis is a big problem especially in North America. It is causing a lot of bees to die which is leading to a honeybee crisis in North America, It is even starting to become a problem in Europe now aswell. Nosemosis is a disease caused by two different species of microsporidian parasites, That are a type of fungus that form spores. Whenever a bee becomes infected, it has problems digesting food, which results to a shorter lifespan. Whenever a colony's queen gets infected, they will stop laying eggs. All leading to the whole colony dying [1].
 
 Something that makes the disease especially dangerous is the spreading. One bee could be infected, leading to the whole hive to be infected. Whenever one of those bees is close to another hive, it could infect one of their bees resulting in the whole process happening again and again. Until a whole apiary is infected.
 
@@ -36,29 +36,31 @@ the spread of the infection follows this reproductive cycle.
 - There is a Winter die-back which is not caused by N. ceranae infection
 [2]
 
-As mentioned, the spread of Nosemosis is a big problem and needs to be stopped. Which is why there is a mathematical model that follows the spread of Nosemosis [3]. This mathematical model is used to create a simulation that will be used to really understand the spread of Nosemosis throughout different hives in an apiary. The simulation could be used by beekeepers that want to keep track of the health of their hives. The goal of this project is to give a visual output of what the spread of Nosemosis looks like. And what the big factors that change the outcome are.
+As mentioned, the spread of Nosemosis is a big problem and needs to be stopped. Which is why there is a mathematical model that follows the spread of Nosemosis [3]. This mathematical model is used to create a simulation that will be used to understand the spread of Nosemosis throughout different hives in an apiary. The simulation could be used by beekeepers that want to keep track of the health of their hives. The goal of this project is to give a visual output of what the spread of Nosemosis looks like. And what the big factors that change the outcome are.
 
 ### The model
 
-The model models the spread of Nosemosis throughout different hives, each day the 5 main values get updated, but every year when spring arrives, the last value (which is the disease level), gets changed according to different values due to the disease having a spike in the spring.
+The model, models the spread of Nosemosis throughout different hives, each day the 5 main values get updated, but every year when spring arrives, the last value (which is the disease level), gets changed according to different values due to the disease having a spike in the spring.
 
-The model consists of 5 main states. Hi1, Hi2, Fi0, Fi1 and Ei. Hi1 is the susceptible hive population, Hi1 stands for the infected hive bee population, the Fi1 and Fi2 stand for the susceptible and infected hive population of foragers. The Ei stands for the envrironmental disease potential. A view of the model is shown below.
+![image](flowchart.png)
 
-![image! flowchart path]
+#### The grid system
+Before explaining the formula, it is important to understand how the hives are positioned. This is necessary because the hives interact with eachother. A neighbourhood is a bunch of hives next to eachother on a grid. Each hive has its neighbours. for example: on a 3x3 grid, hive 1 has 3 neighbours (2, 4 and 5), and hive 5 has 8 neighbours (1, 2, 3, 4, 6, 7, 8, 9). This also means that whenever hive 5 is infected, It spreads faster than if hive 1 was infected.
 
-The differential equations are written like this:
+#### The equations
+The susceptible hive population (Hi0) is calculated within the first equation. The Infected hive population (Hi1) is calculated in the second formula, which uses the environmental disease potential (Ei) to calulate the sub-population. The third and fourth formulas calculate the same as Hi0 and Hi1, Except that it is for the foragers. The last and most important formula calculates the environmental disease potential (Ei). This also gets affected by another formula that only runs every first day of spring. The environmental disease potential for a curtain hive (Ek), is that value (which overwrites the Ei value). Resulting to the Ei value getting overwritten by the Ek value every year.
+The Ek formula is a little complicated. At first, it uses The sum of all its neighbous Ek values. Then it calculates the lim of the result of the formula, together with all its previous results. This happens in order to calculate where the Ek value is going to.
 
-Hi0= β(t)(Zi)nκ(t)n+ (Zi)n− σ1(t)Hi0+ σ2(t)FiZiFi0− η0(t)Hi0−α(t)Hi0Eiλ(t) + Ei
+The parameters differ each season. The reason for this is that There's different factors every season. The values of all the parameters are shown in the table below. The initial values of the states are 10^4 for Hi0 and Fi0, and 0 for the other three. The reasoning behind the initial values are that there needs to be a population to begin with. Which is 10^4 bees in this case.
+The spore deposition rate parameter (γ), is different than the other parameters. The values are xγW, meaning it needs to multiply by γW. The article says γW is 0.1. Meaning all the spore deposition rate values will be multiplied by 0.1.
 
-Hi1=−σ1(t)Hi1+ σ2(t)FiZiFi1− η1(t)Hi1+ α(t)Hi0Eiλ(t) + Ei,
+```{r echo=FALSE}
+parameters <- read.table("parameters.txt", sep="\t")
+colnames(parameters) <- parameters[1,]
+parameters <- parameters[2:nrow(parameters),]
+parameters
+```
 
-Fi0= σ1(t)Hi0−[σ2(t)FiZi+ φ0(t)]Fi0,
-
-Fi1= σ1(t)Hi1−[σ2(t)FiZi+ φ1(t)]Fi1,
-
-Ei= γ(t)Hi1− δ(t)Ei−˜α(t)HiEiλ(t) + Ei
-
-The susceptible hive population (Hi0) is calculated using a lot of parameters (shown in the table below). 
 
 https://beeaware.org.au/archive-pest/nosema/#ad-image-0 [1]
 https://www.sciencedirect.com/topics/medicine-and-dentistry/nosemosis#:~:text=Nosemosis%20symptoms%20include%20lifespan%20reduction%2C%20lethargic%20behavior%2C%20and,N.%20ceranae%20in%20both%20laboratory%20and%20field%20trials. [2]
