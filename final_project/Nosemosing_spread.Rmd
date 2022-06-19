@@ -1,0 +1,65 @@
+---
+title: "Introduction_and_model"
+output:
+  html_document: default
+  pdf_document: default
+date: '2022-06-19'
+---
+
+
+### Introduction
+
+Nosemosis is a big problem especially in North America. It is causing a lot of bees to die which is leading to a honeybee crisis in North America, It is even starting to become a problem in Europe now aswell. Nosemosis is a diseased caused by two different species of microsporidian parasites, That are a type of fungus that form spores. Whenever a bee becomes infected, it has problems digesting food, which leads to a shorter lifespan. Whenever a colony's queen gets infected, they will stop laying eggs. All leading to the whole colony dying [1].
+
+Something that makes the disease especially dangerous is the spreading. One bee could be infected, leading to the whole hive to be infected. Whenever one of those bees is close to another hive, it could infect one of their bees resulting in the whole process happening again and again. Until a whole apiary is infected.
+
+the spread of the infection follows this reproductive cycle.
+
+*SPRING*
+
+- Queen lays more eggs than usual.
+- The amount of adult bees increases. 
+- Spore transmission as older bees feed younger and young will clean the comb cells contaminated with spores.
+- New emerged bees get spores from older bees.
+- Nosemosis has a spike when it is spring.
+
+*Summer*
+
+- Queen still lays eggs.
+- Young bees continue to arrive become infected.
+- The infection rate stays high until mid-summer
+
+*Autumn and winter*
+
+- The queen reduces laying eggs
+- N. ceranae spore transmission decreases
+- There is a Winter die-back which is not caused by N. ceranae infection
+[2]
+
+As mentioned, the spread of Nosemosis is a big problem and needs to be stopped. Which is why there is a mathematical model that follows the spread of Nosemosis [3]. This mathematical model is used to create a simulation that will be used to really understand the spread of Nosemosis throughout different hives in an apiary. The simulation could be used by beekeepers that want to keep track of the health of their hives. The goal of this project is to give a visual output of what the spread of Nosemosis looks like. And what the big factors that change the outcome are.
+
+### The model
+
+The model models the spread of Nosemosis throughout different hives, each day the 5 main values get updated, but every year when spring arrives, the last value (which is the disease level), gets changed according to different values due to the disease having a spike in the spring.
+
+The model consists of 5 main states. Hi1, Hi2, Fi0, Fi1 and Ei. Hi1 is the susceptible hive population, Hi1 stands for the infected hive bee population, the Fi1 and Fi2 stand for the susceptible and infected hive population of foragers. The Ei stands for the envrironmental disease potential. A view of the model is shown below.
+
+![image! flowchart path]
+
+The differential equations are written like this:
+
+Hi0= β(t)(Zi)nκ(t)n+ (Zi)n− σ1(t)Hi0+ σ2(t)FiZiFi0− η0(t)Hi0−α(t)Hi0Eiλ(t) + Ei
+
+Hi1=−σ1(t)Hi1+ σ2(t)FiZiFi1− η1(t)Hi1+ α(t)Hi0Eiλ(t) + Ei,
+
+Fi0= σ1(t)Hi0−[σ2(t)FiZi+ φ0(t)]Fi0,
+
+Fi1= σ1(t)Hi1−[σ2(t)FiZi+ φ1(t)]Fi1,
+
+Ei= γ(t)Hi1− δ(t)Ei−˜α(t)HiEiλ(t) + Ei
+
+The susceptible hive population (Hi0) is calculated using a lot of parameters (shown in the table below). 
+
+https://beeaware.org.au/archive-pest/nosema/#ad-image-0 [1]
+https://www.sciencedirect.com/topics/medicine-and-dentistry/nosemosis#:~:text=Nosemosis%20symptoms%20include%20lifespan%20reduction%2C%20lethargic%20behavior%2C%20and,N.%20ceranae%20in%20both%20laboratory%20and%20field%20trials. [2]
+https://link.springer.com/chapter/10.1007/978-3-319-99719-3_35 [3]
