@@ -66,7 +66,7 @@ The Ek formula is a little complicated. At first, it uses The sum of all its nei
 The parameters differ each season. The reason for this is that There's different factors every season. The values of all the parameters are shown in the table below. The initial values of the states are 10^4 for Hi0 and Fi0, and 0 for the other three. The reasoning behind the initial values are that there needs to be a population to begin with. Which is 10^4 bees in this case.
 The spore deposition rate parameter (y), is different than the other parameters. The values are xyW, meaning it needs to multiply by yw. The article says yw is 0.1. Meaning all the spore deposition rate values will be substituted by 0.1.
 
-![image](flowchart.png)
+![image](parameters.png)
 
 ```{r echo=FALSE}
 library(deSolve)
